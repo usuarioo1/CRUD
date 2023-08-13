@@ -11,7 +11,10 @@ let ordenes = [];
 function agregarOrden(nombreMesero, pedido) {
     ordenes.push({ mesero: nombreMesero, pedido: pedido });
     mostrarOrdenes();
+    guardarEnLocalStorage();
 }
+
+
 
 // Función para mostrar las órdenes en la lista
 function mostrarOrdenes() {
@@ -26,6 +29,7 @@ function mostrarOrdenes() {
           <p>Pedido: ${orden.pedido}</p>
           <button class="btn-edit" data-index="${index}">Editar</button>
           <button class="btn-delete" data-index="${index}">Eliminar</button>
+          <hr>
       `;
       ordenesList.appendChild(ordenElement);
   }
@@ -33,8 +37,8 @@ function mostrarOrdenes() {
 
 
 // Función para manejar el envío del formulario
-form.addEventListener('submit', function (event) {
-    event.preventDefault();
+form.addEventListener('submit', function (e) {
+    e.preventDefault();
     const nombreMesero = meseroInput.value;
     const pedido = pedidoInput.value;
     agregarOrden(nombreMesero, pedido);
@@ -54,12 +58,12 @@ function editarOrden(index, nuevoPedido) {
 }
 
 // Event delegation para manejar clics en botones de editar y eliminar
-ordenesList.addEventListener('click', function (event) {
-    if (event.target.classList.contains('btn-delete')) {
-        const index = event.target.getAttribute('data-index');
+ordenesList.addEventListener('click', function (e) {
+    if (e.target.classList.contains('btn-delete')) {
+        const index = e.target.getAttribute('data-index');
         eliminarOrden(index);
-    } else if (event.target.classList.contains('btn-edit')) {
-        const index = event.target.getAttribute('data-index');
+    } else if (e.target.classList.contains('btn-edit')) {
+        const index = e.target.getAttribute('data-index');
         const nuevoPedido = prompt('Editar pedido:', ordenes[index].pedido);
         if (nuevoPedido !== null) {
             editarOrden(index, nuevoPedido);
@@ -69,3 +73,7 @@ ordenesList.addEventListener('click', function (event) {
 
 // Inicializar la lista de órdenes vacía al cargar la página
 mostrarOrdenes();
+
+function guardarEnLocalStorage() {
+    localStorage.setItem('ordenes', JSON.stringify(ordenes));
+}
